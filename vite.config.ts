@@ -5,18 +5,16 @@ import { VitePWA } from 'vite-plugin-pwa'
 export default defineConfig({
   plugins: [
     react(),
-
     VitePWA({
       registerType: 'autoUpdate',
-
       manifest: {
-        name: 'FIFA World Cup Album 20226',
-        short_name: 'WC26-Album',
+        name: 'Album Tracker 26',
+        short_name: 'Tracker 26',
+        description: 'Control de estampas y faltantes',
         theme_color: '#0f172a',
         background_color: '#0f172a',
         display: 'standalone',
         start_url: '/',
-
         icons: [
           {
             src: '/pwa-192x192.png',
