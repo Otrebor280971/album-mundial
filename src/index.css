@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply antialiased bg-[#0a0a0a] text-neutral-100;
+    overscroll-behavior: none;
+  }
+
+  /* Prevent layout shift on scrollbars */
+  * {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  *::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@layer utilities {
+
+  /* iOS safe area bottom padding for bottom nav */
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom, 8px);
+  }
+}
