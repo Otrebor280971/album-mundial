@@ -43,3 +43,5 @@ coverage/
 
 # system files
 Thumbs.db
+
+.jks

@@ -42,7 +42,6 @@ export function HomeView({ onNavigate }: HomeViewProps) {
   return (
     <div className="px-4 pt-4 pb-24">
       <h1 className="text-2xl font-semibold tracking-tight mb-0.5">Mi Álbum</h1>
-      <p className="text-sm text-neutral-400 mb-5">Mundial FIFA 2026</p>
 
       {/* Progress */}
       <div className="bg-[#111111] rounded-xl border border-neutral-800 p-4 mb-4">

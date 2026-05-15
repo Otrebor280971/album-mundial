@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Album Tracker 26</string>
+    <string name="title_activity_main">Album Tracker 26</string>
+    <string name="package_name">com.Otrebor050607.albumtracker26</string>
+    <string name="custom_url_scheme">com.Otrebor050607.albumtracker26</string>
+</resources>
