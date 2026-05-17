@@ -2,6 +2,7 @@ import { useStickerStore } from '../store/stickerStore'
 import { StatCard } from '../components/StatCard'
 import type { View } from '../types'
 import { Package, BookOpen, ListChecks, Repeat } from 'lucide-react'
+import { STICKERS } from '../data/stickers'
 
 interface HomeViewProps {
   onNavigate: (view: View) => void
@@ -9,8 +10,24 @@ interface HomeViewProps {
 
 export function HomeView({ onNavigate }: HomeViewProps) {
   const getStats = useStickerStore(s => s.getStats)
+  const inventory = useStickerStore(s => s.inventory)
   const stats = getStats()
 
+  const totalCC = STICKERS.filter(s => s.code === 'CC').length || 14
+  const totalFWC = STICKERS.filter(s => s.code === 'FWC').length
+  const totalRegular = stats.total - totalCC
+
+  const ownedCC = Object.keys(inventory).filter(id => id.startsWith('CC') && inventory[id] > 0).length
+  const ownedFWC = Object.keys(inventory).filter(id => (id.startsWith('FWC') || id === '00') && inventory[id] > 0).length
+  
+  const ownedRegular = stats.owned - ownedCC
+
+  const seleccionesUnicas = new Set(
+    Object.keys(inventory)
+      .filter(id => inventory[id] > 0)
+      .map(id => id.replace(/\d+$/, ''))
+      .filter(code => code !== 'CC' && code !== 'FWC' && code !== '')
+  ).size
 
   const actions = [
     {
@@ -40,8 +57,10 @@ export function HomeView({ onNavigate }: HomeViewProps) {
   ]
 
   return (
-    <div className="px-4 pt-4 pb-24">
+    <div className="px-4 pt-4 pb-24 text-neutral-100">
       <h1 className="text-2xl font-semibold tracking-tight mb-0.5">Mi Álbum</h1>
+      <br/>
+      <br/>
 
       {/* Progress */}
       <div className="bg-[#111111] rounded-xl border border-neutral-800 p-4 mb-4">
@@ -55,30 +74,30 @@ export function HomeView({ onNavigate }: HomeViewProps) {
             style={{ width: `${stats.completionPct}%` }}
           />
         </div>
-        <p className="text-xs text-neutral-400 mt-2">{stats.owned} de {stats.total} estampas</p>
+        <div className="flex justify-between items-center mt-2 text-xs text-neutral-400">
+          <span>{ownedRegular} de {totalRegular} estampas</span>
+          <span>{ownedCC} de {totalCC} estampas CC</span>
+        </div>
       </div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-2 gap-2.5 mb-5">
-        <StatCard label="Tengo" value={stats.owned} color="green" />
+      <div className="grid grid-cols-2 gap-2.5 mb-2.5">
+        <StatCard label="Tengo" value={stats.owned} color="aqua" />
         <StatCard label="Faltan" value={stats.missing} color="red" />
-        <StatCard label="Repetidas" value={stats.duplicates} color="amber" />
-        <StatCard label="Selecciones" value={
-          Object.keys(
-            Object.fromEntries(
-              Object.keys(useStickerStore.getState().inventory).map(id => [id.replace(/\d+$/, ''), true])
-            )
-          ).length
-        } color="blue" />
+        <StatCard label="Repetidas" value={stats.duplicates} color="pink" />
+        <StatCard label="Selecciones" value={seleccionesUnicas} color="blue" />
       </div>
 
-      {/* Quick actions */}
+      <div className="grid grid-cols-2 gap-2.5 mb-5">
+        <StatCard label="Estampas CC" value={`${ownedCC} / ${totalCC}`} color="amber" />
+        <StatCard label="Especiales (FWC)" value={`${ownedFWC} / ${totalFWC}`} color="purple" />
+      </div>
+
       <div className="grid grid-cols-2 gap-2.5">
         {actions.map(({ view, icon, title, desc }) => (
           <button
             key={view}
             onClick={() => onNavigate(view)}
-            className="bg-[#111111] rounded-xl border border-neutral-800 p-4 text-left flex flex-col gap-2 active:scale-[0.97] transition-transform duration-100 cursor-pointer"
+            className="bg-[#111111] rounded-xl border border-neutral-800 p-4 text-left flex flex-col gap-2 active:scale-[0.97] transition-transform duration-100 cursor-pointer hover:bg-neutral-900"
           >
             <div className="text-brand-400">
               {icon}

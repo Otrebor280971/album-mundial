@@ -3,30 +3,20 @@ import stickersRaw from './stickers.txt?raw'
 
 function parseStickerLine(line: string): Sticker | null {
   const trimmed = line.trim()
-
   if (!trimmed) return null
 
   const firstSpace = trimmed.indexOf(' ')
-
   if (firstSpace === -1) return null
 
   const stickerId = trimmed.slice(0, firstSpace)
   let content = trimmed.slice(firstSpace + 1)
 
   const isFoil = content.includes('FOIL')
-
   content = content.replace('FOIL', '').trim()
 
   // Caso especial: Panini 00
   if (stickerId === '00') {
-    return {
-      id: '00',
-      code: 'FWC',
-      number: 0,
-      country: 'Mundial',
-      name: content,
-      type: 'foil',
-    }
+    return { id: '00', code: 'FWC', number: 0, country: 'Mundial', name: content, type: 'foil' }
   }
 
   const codeMatch = stickerId.match(/[A-Z]+/)
@@ -40,23 +30,21 @@ function parseStickerLine(line: string): Sticker | null {
   let country = 'Mundial'
   let name = content
 
-  if (content.includes(' - ')) {
+  // 🚨 NUEVA LÓGICA: Interceptar Coca-Cola
+  if (code === 'CC') {
+    country = 'Coca-Cola'
+    if (content.includes(' - ')) {
+      name = content.split(' - ')[0].trim()
+    }
+  } else if (content.includes(' - ')) {
     const parts = content.split(' - ')
-
     name = parts[0].trim()
     country = parts[1].trim()
   } else if (code !== 'FWC') {
     country = code
   }
 
-  return {
-    id: stickerId,
-    code,
-    number,
-    country,
-    name,
-    type: isFoil ? 'foil' : 'normal',
-  }
+  return { id: stickerId, code, number, country, name, type: isFoil ? 'foil' : 'normal' }
 }
 
 export const COUNTRY_FLAGS: Record<string, string> = {}

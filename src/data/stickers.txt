@@ -618,7 +618,7 @@ KSA8 Hassan Altambakti - Saudi Arabia
 KSA9 Musab Aljuwayr - Saudi Arabia
 KSA10 Ziyad Aljohani - Saudi Arabia
 KSA11 Abdullah Alkhaibari - Saudi Arabia
-KAS12 Nasser Aldawsari - Saudi Arabia
+KSA12 Nasser Aldawsari - Saudi Arabia
 KSA13 Team Photo - Saudi Arabia
 KSA14 Saleh Abu Alshamat - Saudi Arabia
 KSA15 Marwan Alsahafi - Saudi Arabia
@@ -978,3 +978,18 @@ FWC16 Brazil 2002 - World Cup History FOIL
 FWC17 Italy 2006 - World Cup History FOIL
 FWC18 Germany 2014 - World Cup History FOIL
 FWC19 Argentina 2022 - World Cup History FOIL
+
+CC1 Lamine Yamal
+CC2 Joshua Kimmich
+CC3 Harry Kane
+CC4 Santiago Giménez
+CC5 Josko Gvardiol
+CC6 Federico Valverde
+CC7 Jefferson Lerma
+CC8 Enner Valencia
+CC9 Gabriel Magalhães
+CC10 Virgil van Dijk
+CC11 Alphonso Davies
+CC12 Emiliano Martínez
+CC13 Raúl Jiménez
+CC14 Lautaro Martinez

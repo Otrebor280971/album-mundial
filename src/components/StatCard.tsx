@@ -1,14 +1,17 @@
 interface StatCardProps {
   label: string
   value: number | string
-  color?: 'green' | 'red' | 'amber' | 'blue' | 'default'
+  color?: 'green' | 'red' | 'amber' | 'blue' | 'default' | 'purple' | 'pink' | 'aqua'
 }
 
 const colorMap = {
   green: 'text-brand-400',
-  red:   'text-red-600 dark:text-red-400',
+  red:   'text-red-600 dark:text-red-600',
   amber: 'text-amber-600 dark:text-amber-400',
   blue:  'text-blue-600 dark:text-blue-400',
+  purple: 'text-purple-600 dark:text-purple-500',
+  pink: 'text-rose-600 dark:text-pink-400',
+  aqua: 'text-lime-600 dark:text-lime-400', 
   default: 'text-neutral-800 dark:text-neutral-100',
 }
 

@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from 'react'
+import { useRef, useState } from 'react'
 import { useStickerStore } from '../store/stickerStore'
 import { useFuseSearch } from '../hooks/useFuseSearch'
 import { useToast } from '../hooks/useToast'
@@ -18,12 +18,11 @@ export function PacksView() {
   const inputRef = useRef<HTMLInputElement>(null)
   const dropdownRef = useRef<HTMLDivElement>(null)
 
-  // Mantener focus en input al montar
-  useEffect(() => { inputRef.current?.focus() }, [])
-
   function quickAdd(id: string) {
     addSticker(id)
     clear()
+    // Aquí sí conservamos el focus, porque si el usuario ya está agregando estampas, 
+    // es cómodo que el teclado se quede abierto para buscar la siguiente.
     inputRef.current?.focus()
     toast(`✓ ${id} agregada`)
   }
@@ -54,19 +53,20 @@ export function PacksView() {
           ref={inputRef}
           type="text"
           value={query}
-          onChange={e => setQuery(e.target.value)}
+          // Transformamos el valor a mayúsculas inmediatamente
+          onChange={e => setQuery(e.target.value.toUpperCase())}
           onKeyDown={e => e.key === 'Escape' && clear()}
           placeholder="Buscar por código o nombre (ej. MEX17, messi...)"
           autoComplete="off"
           autoCorrect="off"
           autoCapitalize="characters"
-          className="text-black w-full px-4 py-3 rounded-xl border border-neutral-800 bg-[#111111]text-neutral-100 placeholder:text-neutral-500 text-sm outline-none focus:border-brand-400 transition-colors"
+          className="text-white w-full px-4 py-3 rounded-xl border border-neutral-800 bg-[#111111] placeholder:text-neutral-500 text-sm outline-none focus:border-brand-400 transition-colors"
         />
 
         {showDropdown && (
           <div
             ref={dropdownRef}
-            className="absolute top-full left-0 right-0 mt-1 bg-[#111111] border-neutral-800 rounded-xl overflow-hidden shadow-lg z-10 max-h-56 overflow-y-auto"
+            className="absolute top-full left-0 right-0 mt-1 bg-[#111111] border border-neutral-800 rounded-xl overflow-hidden shadow-lg z-10 max-h-56 overflow-y-auto"
           >
             {results.map(sticker => {
               const cnt = inventory[sticker.id] ?? 0
@@ -74,18 +74,18 @@ export function PacksView() {
                 <button
                   key={sticker.id}
                   onClick={() => quickAdd(sticker.id)}
-                  className="w-full px-4 py-3 flex items-center justify-between border-b border-black/5 dark:border-white/5 last:border-0 active:bg-neutral-50 dark:active:bg-neutral-800 text-left cursor-pointer"
+                  className="w-full px-4 py-3 flex items-center justify-between border-b border-white/5 last:border-0 active:bg-neutral-800 text-left cursor-pointer"
                 >
                   <div>
                     <span className="text-xs font-bold text-brand-400 block">{sticker.id}</span>
-                    <span className="text-sm text-neutral-800 dark:text-neutral-100">
+                    <span className="text-sm text-neutral-100">
                       {sticker.type === 'foil' && '⭐ '}{sticker.name}
                     </span>
                     <span className="text-xs text-neutral-400 block">{sticker.country}</span>
                   </div>
                   {cnt > 0
-                    ? <span className="text-xs bg-brand-50 dark:bg-brand-600/20 text-brand-600 dark:text-brand-400 px-2 py-1 rounded-full font-medium">×{cnt}</span>
-                    : <span className="text-xs bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 px-2 py-1 rounded-full">Falta</span>
+                    ? <span className="text-xs bg-brand-600/20 text-brand-400 px-2 py-1 rounded-full font-medium">×{cnt}</span>
+                    : <span className="text-xs bg-red-900/20 text-red-400 px-2 py-1 rounded-full">Falta</span>
                   }
                 </button>
               )
@@ -107,10 +107,10 @@ export function PacksView() {
             const sticker = STICKERS.find(s => s.id === id)
             const cnt = inventory[id] ?? 0
             return (
-              <div key={id} className="bg-white dark:bg-neutral-900 rounded-xl border border-black/5 dark:border-white/5 px-4 py-3 flex items-center justify-between">
+              <div key={id} className="bg-neutral-900 rounded-xl border border-white/5 px-4 py-3 flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <span className="text-xs font-bold text-brand-400">{id}</span>
-                  <span className="text-sm text-neutral-700 dark:text-neutral-200">{sticker?.name ?? '?'}</span>
+                  <span className="text-sm text-neutral-200">{sticker?.name ?? '?'}</span>
                   {cnt > 1 && <span className="text-xs text-amber-500">×{cnt}</span>}
                 </div>
                 <button
@@ -126,19 +126,20 @@ export function PacksView() {
         </div>
       )}
 
-      {/* Bulk add */}
-      <p className="text-[11px] font-medium text-neutral-400 uppercase tracking-wide mb-2.5">Pegado masivo</p>
+      {/* Agregar múltiples */}
+      <p className="text-[11px] font-medium text-neutral-400 uppercase tracking-wide mb-2.5">Agregar múltiples</p>
       <textarea
         value={bulk}
-        onChange={e => setBulk(e.target.value)}
-        placeholder={"MEX1 BRA7 ARG10\no separadas por comas: MEX1, BRA7\no una por línea"}
+        // Transformamos el valor del textarea a mayúsculas
+        onChange={e => setBulk(e.target.value.toUpperCase())}
+        placeholder={"Ingresa los códigos de la estampa\nEJ: MEX1 BRA7 ARG10"}
         rows={4}
-        className="w-full px-4 py-3 rounded-xl border border-black/10 dark:border-white/10 bg-white dark:bg-neutral-900 text-sm outline-none focus:border-brand-400 transition-colors resize-none mb-2"
+        className="w-full px-4 py-3 rounded-xl border border-white/10 bg-neutral-900 text-white text-sm outline-none focus:border-brand-400 transition-colors resize-none mb-2"
       />
       <button
         onClick={handleBulkAdd}
         disabled={!bulk.trim()}
-        className="w-full py-3.5 rounded-xl bg-brand-400 text-white font-medium text-sm disabled:opacity-40 active:scale-[0.98] transition-all"
+        className="w-full py-3.5 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-medium text-sm disabled:opacity-40 active:scale-[0.98] transition-all"
       >
         Agregar todas
       </button>

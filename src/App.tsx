@@ -23,6 +23,8 @@ export default function App() {
     <ToastProvider>
       <div className="min-h-screen bg-[#0a0a0a] text-neutral-100 max-w-lg mx-auto relative">
         <main>
+          <br/>
+          <br/>
           {views[view]}
         </main>
         <BottomNav current={view} onChange={setView} />
