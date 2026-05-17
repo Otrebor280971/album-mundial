@@ -28,7 +28,7 @@ export function MissingView() {
   }
 
   return (
-    <div className="px-4 pt-4 pb-24">
+    <div className="px-4 pt-4 pb-24 text-neutral-100">
       <h1 className="text-2xl font-semibold tracking-tight mb-0.5">Faltantes</h1>
       <p className="text-sm text-neutral-400 mb-4">{missing.length} estampas por conseguir</p>
 
@@ -37,7 +37,7 @@ export function MissingView() {
         value={search}
         onChange={e => setSearch(e.target.value)}
         placeholder="Buscar faltante..."
-        className="w-full px-4 py-3 rounded-xl border border-black/10 dark:border-white/10 bg-white dark:bg-neutral-900 text-sm outline-none focus:border-brand-400 transition-colors mb-3"
+        className="w-full px-4 py-3 rounded-xl border border-neutral-800 bg-[#111111] text-neutral-100 placeholder:text-neutral-500 text-sm outline-none focus:border-brand-400 transition-colors mb-3"
       />
 
       {/* Country filter pills */}
@@ -47,7 +47,7 @@ export function MissingView() {
           className={`flex-shrink-0 px-3.5 py-1.5 rounded-full text-xs border transition-all ${
             !activeCode
               ? 'bg-brand-400 border-brand-400 text-white'
-              : 'bg-white dark:bg-neutral-900 border-black/10 dark:border-white/10 text-neutral-500'
+              : 'bg-[#111111] border-neutral-800 text-neutral-400'
           }`}
         >
           Todas ({missing.length})
@@ -59,7 +59,7 @@ export function MissingView() {
             className={`flex-shrink-0 px-3.5 py-1.5 rounded-full text-xs border transition-all whitespace-nowrap ${
               activeCode === code
                 ? 'bg-brand-400 border-brand-400 text-white'
-                : 'bg-white dark:bg-neutral-900 border-black/10 dark:border-white/10 text-neutral-500'
+                : 'bg-[#111111] border-neutral-800 text-neutral-400'
             }`}
           >
             {COUNTRY_FLAGS[code] ?? ''} {COUNTRY_NAMES[code] ?? code}
@@ -70,7 +70,7 @@ export function MissingView() {
       <button
         onClick={copyList}
         disabled={filtered.length === 0}
-        className="w-full py-2.5 rounded-xl border border-black/10 dark:border-white/10 bg-white dark:bg-neutral-900 text-sm font-medium mb-4 flex items-center justify-center gap-2 disabled:opacity-40"
+        className="w-full py-2.5 rounded-xl border border-neutral-800 bg-[#111111] text-neutral-100 text-sm font-medium mb-4 flex items-center justify-center gap-2 disabled:opacity-40"
       >
         <i className="ti ti-copy text-base" aria-hidden="true" />
         Copiar lista ({filtered.length})
@@ -86,11 +86,11 @@ export function MissingView() {
           {filtered.map(sticker => (
             <div
               key={sticker.id}
-              className="bg-white dark:bg-neutral-900 rounded-xl border border-black/5 dark:border-white/5 px-4 py-3 flex items-center justify-between"
+              className="bg-[#111111] rounded-xl border border-neutral-800 px-4 py-3 flex items-center justify-between"
             >
               <div>
                 <span className="text-sm font-bold text-red-500">{sticker.id}</span>
-                <p className="text-sm text-neutral-700 dark:text-neutral-200">
+                <p className="text-sm text-neutral-100">
                   {sticker.type === 'foil' && '⭐ '}{sticker.name}
                 </p>
                 <p className="text-xs text-neutral-400">
@@ -99,7 +99,7 @@ export function MissingView() {
               </div>
               <button
                 onClick={() => { addSticker(sticker.id); toast(`✓ ${sticker.id} agregada`) }}
-                className="bg-brand-50 dark:bg-brand-600/20 text-brand-600 dark:text-brand-400 text-xs font-medium px-3 py-1.5 rounded-lg"
+                className="bg-brand-600/20 text-brand-400 text-xs font-medium px-3 py-1.5 rounded-lg"
               >
                 + Tengo
               </button>
