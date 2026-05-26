@@ -1,7 +1,61 @@
 import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
+import { persist, type StorageValue } from 'zustand/middleware'
 import type { Inventory, AlbumStats, View } from '../types'
 import { STICKERS } from '../data/stickers'
+
+// Storage seguro: captura errores de cuota (localStorage lleno)
+// y advierte en consola sin romper la app ni perder el estado en memoria.
+const safeStorage = {
+  getItem: (name: string): string | null => {
+    try {
+      return localStorage.getItem(name)
+    } catch {
+      console.warn('[album-tracker] No se pudo leer localStorage:', name)
+      return null
+    }
+  },
+  setItem: (name: string, value: string): void => {
+    try {
+      localStorage.setItem(name, value)
+    } catch (err) {
+      // QuotaExceededError: el storage está lleno.
+      // El estado en memoria sigue intacto; solo falla la escritura al disco.
+      console.warn('[album-tracker] localStorage lleno, no se pudo guardar:', err)
+    }
+  },
+  removeItem: (name: string): void => {
+    try {
+      localStorage.removeItem(name)
+    } catch {
+      console.warn('[album-tracker] No se pudo eliminar de localStorage:', name)
+    }
+  },
+}
+
+// Migración one-shot: mueve datos de la clave anterior ('panini-mundial-2026')
+// a la nueva ('album-tracker-26') la primera vez que el usuario abre la app
+// con la versión actualizada. Una vez copiados, borra la clave vieja para no
+// duplicar el espacio ocupado en localStorage.
+const OLD_KEY = 'panini-mundial-2026'
+const NEW_KEY = 'album-tracker-26'
+
+function migrateOldKey(): void {
+  try {
+    const alreadyMigrated = localStorage.getItem(NEW_KEY)
+    if (alreadyMigrated) return // la clave nueva ya existe, no hacer nada
+
+    const old = localStorage.getItem(OLD_KEY)
+    if (!old) return // tampoco había clave vieja, usuario nuevo
+
+    localStorage.setItem(NEW_KEY, old)
+    localStorage.removeItem(OLD_KEY)
+    console.info('[album-tracker] Datos migrados de clave anterior correctamente.')
+  } catch (err) {
+    console.warn('[album-tracker] No se pudo migrar la clave anterior:', err)
+  }
+}
+
+migrateOldKey()
 
 interface StickerState {
   // ── Data ────────────────────────────────────────────────────────────────
@@ -16,7 +70,6 @@ interface StickerState {
   addSticker: (id: string) => void
   removeSticker: (id: string) => void
   tradeSticker: (giveId: string, receiveId: string) => void
-  resetCollection: () => void
 
   // ── Derived queries ─────────────────────────────────────────────────────
   getMissing: () => typeof STICKERS
@@ -79,7 +132,6 @@ export const useStickerStore = create<StickerState>()(
       tradeSticker(giveId, receiveId) {
         const inventory = get().inventory
 
-        // No permitir intercambiar si solo tienes 1
         if ((inventory[giveId] ?? 0) <= 1) return
 
         get().removeSticker(giveId)
@@ -99,14 +151,6 @@ export const useStickerStore = create<StickerState>()(
             inventory: updatedInventory,
             recentlyAdded,
           }
-        })
-      },
-
-      // ── Reset ───────────────────────────────────────────────────────────
-      resetCollection() {
-        set({
-          inventory: {},
-          recentlyAdded: [],
         })
       },
 
@@ -138,7 +182,6 @@ export const useStickerStore = create<StickerState>()(
 
         const total = STICKERS.length
 
-        // Cuenta sobrantes reales
         const duplicates = Object.values(inventory).reduce(
           (sum, count) => sum + Math.max(count - 1, 0),
           0
@@ -157,8 +200,30 @@ export const useStickerStore = create<StickerState>()(
       },
     }),
     {
-      name: 'panini-mundial-2026',
-
+      name: 'album-tracker-26',
+      storage: {
+        getItem: (name) => {
+          const str = safeStorage.getItem(name)
+          if (!str) return null
+          try {
+            return JSON.parse(str) as StorageValue<Pick<StickerState, 'inventory' | 'recentlyAdded'>>
+          } catch {
+            console.warn('[album-tracker] Estado corrupto en localStorage, se ignora.')
+            return null
+          }
+        },
+        setItem: (name, value) => {
+          safeStorage.setItem(name, JSON.stringify(value))
+        },
+        removeItem: (name) => {
+          safeStorage.removeItem(name)
+        },
+      },
+      version: 1,
+      migrate: (persistedState, _version) => {
+        // Cualquier versión anterior se conserva tal cual en lugar de borrarse.
+        return persistedState as Pick<StickerState, 'inventory' | 'recentlyAdded'>
+      },
       partialize: state => ({
         inventory: state.inventory,
         recentlyAdded: state.recentlyAdded,

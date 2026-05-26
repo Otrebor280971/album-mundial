@@ -20,7 +20,7 @@ export function TradeView() {
     const isReceiveValid = missing.some(s => s.id === receiveId)
 
     if (!isGiveValid || !isReceiveValid) { 
-      toast('⚠️ Verifica los códigos ingresados')
+      toast('Verifica los códigos ingresados')
       return 
     }
 
@@ -43,7 +43,7 @@ export function TradeView() {
           </p>
           <div className="flex flex-col gap-1.5 max-h-44 overflow-y-auto">
             {missing.length === 0 ? (
-              <p className="text-xs text-neutral-400">¡Ninguna! 🎉</p>
+              <p className="text-xs text-neutral-400">¡Ninguna!</p>
             ) : missing.slice(0, 30).map(s => (
               <div key={s.id} className="flex items-center justify-between bg-red-900/15 rounded-lg px-2 py-1">
                 <span className="text-xs font-semibold text-red-400">{s.id}</span>

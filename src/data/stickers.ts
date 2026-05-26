@@ -14,7 +14,6 @@ function parseStickerLine(line: string): Sticker | null {
   const isFoil = content.includes('FOIL')
   content = content.replace('FOIL', '').trim()
 
-  // Caso especial: Panini 00
   if (stickerId === '00') {
     return { id: '00', code: 'FWC', number: 0, country: 'Mundial', name: content, type: 'foil' }
   }
@@ -30,7 +29,6 @@ function parseStickerLine(line: string): Sticker | null {
   let country = 'Mundial'
   let name = content
 
-  // 🚨 NUEVA LÓGICA: Interceptar Coca-Cola
   if (code === 'CC') {
     country = 'Coca-Cola'
     if (content.includes(' - ')) {

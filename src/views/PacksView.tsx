@@ -21,8 +21,6 @@ export function PacksView() {
   function quickAdd(id: string) {
     addSticker(id)
     clear()
-    // Aquí sí conservamos el focus, porque si el usuario ya está agregando estampas, 
-    // es cómodo que el teclado se quede abierto para buscar la siguiente.
     inputRef.current?.focus()
     toast(`✓ ${id} agregada`)
   }
