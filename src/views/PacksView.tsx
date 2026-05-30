@@ -1,10 +1,12 @@
-import { useRef, useState } from 'react'
+import { useRef, useState, useMemo} from 'react'
 import { useStickerStore } from '../store/stickerStore'
 import { useFuseSearch } from '../hooks/useFuseSearch'
 import { useToast } from '../hooks/useToast'
 import { parseBulkInput } from '../utils/parseBulk'
 import { STICKERS } from '../data/stickers'
 import { PackageX, Undo2 } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
+import { STICKERS_CC_MEX, STICKERS_CC_USA } from '../data/stickers'
 
 export function PacksView() {
   const { query, setQuery, results, clear } = useFuseSearch()
@@ -13,37 +15,45 @@ export function PacksView() {
   const removeSticker = useStickerStore(s => s.removeSticker)
   const inventory = useStickerStore(s => s.inventory)
   const recentlyAdded = useStickerStore(s => s.recentlyAdded)
+  const { t } = useTranslation()
 
   const [bulk, setBulk] = useState('')
   const inputRef = useRef<HTMLInputElement>(null)
   const dropdownRef = useRef<HTMLDivElement>(null)
 
+  const albumVersion = useStickerStore(s => s.albumVersion)
+  const allStickers = useMemo(() => {
+    if (albumVersion === 'MEX') return [...STICKERS, ...STICKERS_CC_MEX]
+    if (albumVersion === 'USA') return [...STICKERS, ...STICKERS_CC_USA]
+    return STICKERS
+  }, [albumVersion])
+
   function quickAdd(id: string) {
     addSticker(id)
     clear()
     inputRef.current?.focus()
-    toast(`✓ ${id} agregada`)
+    toast(t('toast.sticker_added', { name: id }))
   }
 
   function undoAdd(id: string) {
     removeSticker(id)
-    toast(`Deshecho: ${id}`)
+    toast(t('toast.sticker_removed', { name: id }))
   }
 
   function handleBulkAdd() {
     const { valid, invalid } = parseBulkInput(bulk)
     valid.forEach(id => addSticker(id))
     setBulk('')
-    if (invalid.length) toast(`${valid.length} agregadas, ${invalid.length} no encontradas`)
-    else toast(`✓ ${valid.length} estampas agregadas`)
+    if (invalid.length) toast(t('toast.bulk_partial', { valid: valid.length, invalid: invalid.length }))
+    else toast(t('toast.bulk_success', { count: valid.length }))
   }
 
   const showDropdown = query.trim().length > 0 && results.length > 0
 
   return (
     <div className="px-4 pt-4 pb-24">
-      <h1 className="text-2xl font-semibold tracking-tight mb-0.5">Abrir sobres</h1>
-      <p className="text-sm text-neutral-400 mb-4">Busca y agrega estampas</p>
+      <h1 className="text-2xl font-semibold tracking-tight mb-0.5">{t('packs.title')}</h1>
+      <p className="text-sm text-neutral-400 mb-4">{t('packs.subtitle')}</p>
 
       {/* Search */}
       <div className="relative mb-4">
@@ -54,7 +64,7 @@ export function PacksView() {
           // Transformamos el valor a mayúsculas inmediatamente
           onChange={e => setQuery(e.target.value.toUpperCase())}
           onKeyDown={e => e.key === 'Escape' && clear()}
-          placeholder="Buscar por código o nombre (ej. MEX17, messi...)"
+          placeholder={t('packs.search_placeholder')}
           autoComplete="off"
           autoCorrect="off"
           autoCapitalize="characters"
@@ -83,7 +93,7 @@ export function PacksView() {
                   </div>
                   {cnt > 0
                     ? <span className="text-xs bg-brand-600/20 text-brand-400 px-2 py-1 rounded-full font-medium">×{cnt}</span>
-                    : <span className="text-xs bg-red-900/20 text-red-400 px-2 py-1 rounded-full">Falta</span>
+                    : <span className="text-xs bg-red-900/20 text-red-400 px-2 py-1 rounded-full">{t('packs.badge_missing')}</span>
                   }
                 </button>
               )
@@ -93,16 +103,16 @@ export function PacksView() {
       </div>
 
       {/* Recently added */}
-      <p className="text-[11px] font-medium text-neutral-400 uppercase tracking-wide mb-2.5">Últimas agregadas</p>
+      <p className="text-[11px] font-medium text-neutral-400 uppercase tracking-wide mb-2.5">{t('packs.recently_added')}</p>
       {recentlyAdded.length === 0 ? (
         <div className="text-center py-8 text-neutral-400 text-sm">
           <PackageX size={36} className="mx-auto mb-2" />
-          Aún no has agregado estampas
+          {t('packs.recently_empty')}
         </div>
       ) : (
         <div className="flex flex-col gap-2 mb-6">
           {recentlyAdded.map(id => {
-            const sticker = STICKERS.find(s => s.id === id)
+            const sticker = allStickers.find(s => s.id === id)
             const cnt = inventory[id] ?? 0
             return (
               <div key={id} className="bg-neutral-900 rounded-xl border border-white/5 px-4 py-3 flex items-center justify-between">
@@ -116,7 +126,7 @@ export function PacksView() {
                   className="text-xs text-blue-500 px-2 py-1"
                   aria-label={`Deshacer ${id}`}
                 >
-                  <Undo2 size={16} /> Deshacer
+                  <Undo2 size={16} /> {t('packs.undo')}
                 </button>
               </div>
             )
@@ -125,12 +135,12 @@ export function PacksView() {
       )}
 
       {/* Agregar múltiples */}
-      <p className="text-[11px] font-medium text-neutral-400 uppercase tracking-wide mb-2.5">Agregar múltiples</p>
+      <p className="text-[11px] font-medium text-neutral-400 uppercase tracking-wide mb-2.5">{t('packs.bulk_title')}</p>
       <textarea
         value={bulk}
         // Transformamos el valor del textarea a mayúsculas
         onChange={e => setBulk(e.target.value.toUpperCase())}
-        placeholder={"Ingresa los códigos de la estampa\nEJ: MEX1 BRA7 ARG10"}
+        placeholder={t('packs.bulk_placeholder')}
         rows={4}
         className="w-full px-4 py-3 rounded-xl border border-white/10 bg-neutral-900 text-white text-sm outline-none focus:border-brand-400 transition-colors resize-none mb-2"
       />
@@ -139,7 +149,7 @@ export function PacksView() {
         disabled={!bulk.trim()}
         className="w-full py-3.5 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-medium text-sm disabled:opacity-40 active:scale-[0.98] transition-all"
       >
-        Agregar todas
+        {t('packs.bulk_button')}
       </button>
     </div>
   )

@@ -20,6 +20,7 @@ export type View =
   | 'album'
   | 'missing'
   | 'trade'
+  | 'settings'
 
 export interface AlbumStats {
   owned: number

@@ -1,0 +1,255 @@
+{
+  "nav": {
+    "home": "Home",
+    "packs": "Packs",
+    "album": "Album",
+    "missing": "Missing",
+    "trade": "Trade",
+    "settings": "Settings"
+  },
+  "home": {
+    "title": "My Album",
+    "progress_label": "Overall progress",
+    "progress_stickers": "{{ownedRegular}} of {{totalRegular}} stickers",
+    "progress_cc": "{{ownedCC}} of {{totalCC}} CC stickers",
+    "stat_owned": "Owned",
+    "stat_missing": "Missing",
+    "stat_duplicates": "Duplicates",
+    "stat_teams": "Started countries",
+    "stat_teams_complete": "Completed countries",
+    "stat_cc": "CC stickers",
+    "stat_fwc": "Specials (FWC)",
+    "action_packs_title": "Open packs",
+    "action_packs_desc": "Register stickers",
+    "action_album_title": "View album",
+    "action_album_desc": "Your full collection",
+    "action_missing_title": "Missing",
+    "action_missing_desc": "What you still need",
+    "action_trade_title": "Trade",
+    "action_trade_desc": "Manage trades with others"
+  },
+  "packs": {
+    "title": "Open packs",
+    "subtitle": "Search and add stickers",
+    "search_placeholder": "Search by code or name (e.g. MEX17, messi...)",
+    "recently_added": "Recently added",
+    "recently_empty": "You haven't added any stickers yet",
+    "undo": "Undo",
+    "bulk_title": "Add multiple",
+    "bulk_placeholder": "Enter sticker codes\nE.g.: MEX1 BRA7 ARG10",
+    "bulk_button": "Add all",
+    "badge_missing": "Missing"
+  },
+  "album": {
+    "title": "Album",
+    "subtitle": "Tap a sticker to mark it"
+  },
+  "missing": {
+    "title": "Missing",
+    "subtitle": "{{count}} stickers to collect",
+    "search_placeholder": "Search missing...",
+    "filter_all": "All ({{count}})",
+    "copy_button": "Copy list ({{count}})",
+    "empty_title": "No missing stickers in this squad!",
+    "have_it": "+ Have it",
+    "toast": "{{count}} stickers copied to clipboard"
+  },
+  "trade": {
+    "title": "Trade",
+    "subtitle": "Manage your trades",
+    "col_missing": "Missing",
+    "col_missing_empty": "None!",
+    "col_duplicates": "Duplicates",
+    "col_duplicates_empty": "No duplicates yet",
+    "form_title": "Confirm trade",
+    "give_label": "I give",
+    "give_placeholder": "Search (e.g.: MEX1)",
+    "receive_label": "I receive",
+    "receive_placeholder": "Search (e.g.: ARG10)",
+    "confirm_button": "Confirm trade",
+    "give_hint": "Avail: {{count}}",
+    "copy_button": "Copy duplicates"
+  },
+  "toast": {
+    "sticker_added": "✓ {{name}} added",
+    "sticker_removed": "Removed: {{name}}",
+    "sticker_undone": "Undone: {{id}}",
+    "bulk_success": "✓ {{count}} stickers added",
+    "bulk_partial": "{{valid}} added, {{invalid}} not found",
+    "trade_invalid": "Please check the entered codes",
+    "trade_success": "Trade completed",
+    "copied": "Copied!"
+  },
+  "sticker": {
+    "foil_label": "foil"
+  },
+  "countries": {
+    "FWC": "World Cup",
+    "CC": "Coca-Cola",
+    "JPN": "Japan",
+    "KOR": "South Korea",
+    "CZE": "Czech Republic",
+    "IRN": "Iran",
+    "AUS": "Australia",
+    "KSA": "Saudi Arabia",
+    "QAT": "Qatar",
+    "UAE": "United Arab Emirates",
+    "IRQ": "Iraq",
+    "MAR": "Morocco",
+    "SEN": "Senegal",
+    "TUN": "Tunisia",
+    "ALG": "Algeria",
+    "EGY": "Egypt",
+    "NGA": "Nigeria",
+    "CIV": "Ivory Coast",
+    "CMR": "Cameroon",
+    "RSA": "South Africa",
+    "MEX": "Mexico",
+    "USA": "USA",
+    "CAN": "Canada",
+    "CRC": "Costa Rica",
+    "PAN": "Panama",
+    "JAM": "Jamaica",
+    "HON": "Honduras",
+    "ARG": "Argentina",
+    "BRA": "Brazil",
+    "URU": "Uruguay",
+    "COL": "Colombia",
+    "ECU": "Ecuador",
+    "CHI": "Chile",
+    "PAR": "Paraguay",
+    "PER": "Peru",
+    "FRA": "France",
+    "ESP": "Spain",
+    "POR": "Portugal",
+    "ENG": "England",
+    "GER": "Germany",
+    "ITA": "Italy",
+    "NED": "Netherlands",
+    "BEL": "Belgium",
+    "CRO": "Croatia",
+    "DEN": "Denmark",
+    "SUI": "Switzerland",
+    "POL": "Poland",
+    "SRB": "Serbia",
+    "SWE": "Sweden",
+    "NOR": "Norway",
+    "UKR": "Ukraine",
+    "TUR": "Turkey",
+    "AUT": "Austria",
+    "BIH": "Bosnia and Herzegovina",
+    "HAI": "Haiti",
+    "SCO": "Scotland",
+    "CUW": "Curaçao",
+    "NZL": "New Zealand",
+    "CPV": "Cape Verde",
+    "JOR": "Jordan",
+    "COD": "DR Congo",
+    "UZB": "Uzbekistan",
+    "GHA": "Ghana"
+  },
+  "settings": {
+    "version_MEX": "Latin America / Europe",
+    "version_USA": "United States / Canada",
+    "version_stickers": "{{count}} stickers",
+    "title": "Settings",
+    "subtitle": "Customize your experience",
+    "tutorial_title": "View tutorial",
+    "tutorial_desc": "Review how the app works",
+    "language_title": "Language",
+    "version_title": "Album version",
+    "version_none": "Not selected",
+    "cancel": "Cancel"
+  },
+  "tutorial": {
+    "step_counter": "Step {{current}} of {{total}}",
+    "next": "Next",
+    "prev": "Back",
+    "finish": "Let's go!",
+    "skip": "Skip tutorial",
+    "steps": {
+      "welcome": {
+        "title": "Welcome",
+        "body": [
+          "Welcome to Album Tracker 2026.",
+          "This app helps you register stickers, track your album progress, and manage trades easily.",
+          "Press \"Next\" to get started."
+        ]
+      },
+      "nav": {
+        "title": "Navigation bar",
+        "body": [
+          "Use the bottom bar to access all sections of the app.",
+          "From here you can navigate between Home, Packs, Album, Missing, Trade, and Settings."
+        ]
+      },
+      "dashboard": {
+        "title": "Home",
+        "body": [
+          "The Home screen shows a general summary of your collection.",
+          "Here you can quickly check your overall progress and access the most important features."
+        ]
+      },
+      "stats": {
+        "title": "Album stats",
+        "body": [
+          "These cards show:",
+          "• Stickers owned.",
+          "• Missing stickers.",
+          "• Duplicate stickers.",
+          "• Squads started or completed.",
+          "Tap the squads card to toggle between both stats."
+        ]
+      },
+      "packs": {
+        "title": "Register stickers",
+        "body": [
+          "In this section you can add new stickers to your collection.",
+          "You can register them one by one or all at once after opening packs."
+        ]
+      },
+      "bulk": {
+        "title": "Bulk entry",
+        "body": [
+          "Use this field to enter multiple sticker codes at once and save time."
+        ]
+      },
+      "album": {
+        "title": "Album view",
+        "body": [
+          "Here you can see your full album progress and check which stickers you've already collected."
+        ]
+      },
+      "missing": {
+        "title": "Missing stickers",
+        "body": [
+          "See all the stickers you still need.",
+          "You can filter by squad and copy the list to share with other collectors."
+        ]
+      },
+      "trade": {
+        "title": "Trades",
+        "body": [
+          "This section brings together your duplicate and missing stickers to make trading with other collectors easier."
+        ]
+      },
+      "trade_form": {
+        "title": "Register a trade",
+        "body": [
+          "Enter which sticker you're giving and which one you're receiving.",
+          "The app will automatically update your inventory and progress."
+        ]
+      },
+      "settings": {
+        "title": "Settings",
+        "body": [
+          "From here you can:",
+          "• Change the language.",
+          "• Select the album version.",
+          "• Restart this tutorial whenever you need it.",
+          "You're all set to start your collection!"
+        ]
+      }
+    }
+  }
+}

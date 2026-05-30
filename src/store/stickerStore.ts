@@ -1,10 +1,22 @@
 import { create } from 'zustand'
 import { persist, type StorageValue } from 'zustand/middleware'
 import type { Inventory, AlbumStats, View } from '../types'
-import { STICKERS } from '../data/stickers'
+import { STICKERS, STICKERS_CC_MEX, STICKERS_CC_USA } from '../data/stickers'
 
-// Storage seguro: captura errores de cuota (localStorage lleno)
-// y advierte en consola sin romper la app ni perder el estado en memoria.
+// ── Versiones disponibles ────────────────────────────────────────────────────
+export type AlbumVersion = 'MEX' | 'USA'
+
+export const ALBUM_VERSIONS: Record<AlbumVersion, { ccStickers: typeof STICKERS }> = {
+  MEX: { ccStickers: STICKERS_CC_MEX },
+  USA: { ccStickers: STICKERS_CC_USA },
+}
+
+function getFullStickers(version: AlbumVersion | null) {
+  if (!version) return STICKERS
+  return [...STICKERS, ...ALBUM_VERSIONS[version].ccStickers]
+}
+
+// ── Safe storage ─────────────────────────────────────────────────────────────
 const safeStorage = {
   getItem: (name: string): string | null => {
     try {
@@ -18,8 +30,6 @@ const safeStorage = {
     try {
       localStorage.setItem(name, value)
     } catch (err) {
-      // QuotaExceededError: el storage está lleno.
-      // El estado en memoria sigue intacto; solo falla la escritura al disco.
       console.warn('[album-tracker] localStorage lleno, no se pudo guardar:', err)
     }
   },
@@ -32,20 +42,17 @@ const safeStorage = {
   },
 }
 
-// Migración one-shot: mueve datos de la clave anterior ('panini-mundial-2026')
-// a la nueva ('album-tracker-26') la primera vez que el usuario abre la app
-// con la versión actualizada. Una vez copiados, borra la clave vieja para no
-// duplicar el espacio ocupado en localStorage.
+// ── Migración de clave anterior ───────────────────────────────────────────────
 const OLD_KEY = 'panini-mundial-2026'
 const NEW_KEY = 'album-tracker-26'
 
 function migrateOldKey(): void {
   try {
     const alreadyMigrated = localStorage.getItem(NEW_KEY)
-    if (alreadyMigrated) return // la clave nueva ya existe, no hacer nada
+    if (alreadyMigrated) return
 
     const old = localStorage.getItem(OLD_KEY)
-    if (!old) return // tampoco había clave vieja, usuario nuevo
+    if (!old) return
 
     localStorage.setItem(NEW_KEY, old)
     localStorage.removeItem(OLD_KEY)
@@ -57,36 +64,48 @@ function migrateOldKey(): void {
 
 migrateOldKey()
 
+// ── Types ─────────────────────────────────────────────────────────────────────
 interface StickerState {
-  // ── Data ────────────────────────────────────────────────────────────────
+  // ── Data ──────────────────────────────────────────────────────────────────
   inventory: Inventory
   recentlyAdded: string[]
   currentView: View
+  albumVersion: AlbumVersion | null
 
-  // ── Navigation ──────────────────────────────────────────────────────────
+  // ── Navigation ────────────────────────────────────────────────────────────
   setView: (view: View) => void
 
-  // ── Mutations ───────────────────────────────────────────────────────────
+  // ── Setup ─────────────────────────────────────────────────────────────────
+  setAlbumVersion: (version: AlbumVersion) => void
+
+  // ── Mutations ─────────────────────────────────────────────────────────────
   addSticker: (id: string) => void
   removeSticker: (id: string) => void
   tradeSticker: (giveId: string, receiveId: string) => void
 
-  // ── Derived queries ─────────────────────────────────────────────────────
+  // ── Derived queries ───────────────────────────────────────────────────────
   getMissing: () => typeof STICKERS
   getDuplicates: () => typeof STICKERS
   getStats: () => AlbumStats
 }
 
+// ── Store ─────────────────────────────────────────────────────────────────────
 export const useStickerStore = create<StickerState>()(
   persist(
     (set, get) => ({
       inventory: {},
       recentlyAdded: [],
       currentView: 'home',
+      albumVersion: null,
 
       // ── Navigation ──────────────────────────────────────────────────────
       setView(view) {
         set({ currentView: view })
+      },
+
+      // ── Setup ───────────────────────────────────────────────────────────
+      setAlbumVersion(version) {
+        set({ albumVersion: version })
       },
 
       // ── Add sticker ─────────────────────────────────────────────────────
@@ -106,15 +125,13 @@ export const useStickerStore = create<StickerState>()(
         })
       },
 
-      // ── Remove sticker ──────────────────────────────────────────────────
+      // ── Remove sticker ───────────────────────────────────────────────────
       removeSticker(id) {
         set(state => {
           const current = state.inventory[id] ?? 0
-
           if (current <= 0) return state
 
           const inventory = { ...state.inventory }
-
           if (current === 1) {
             delete inventory[id]
           } else {
@@ -128,10 +145,9 @@ export const useStickerStore = create<StickerState>()(
         })
       },
 
-      // ── Trade stickers ──────────────────────────────────────────────────
+      // ── Trade stickers ───────────────────────────────────────────────────
       tradeSticker(giveId, receiveId) {
         const inventory = get().inventory
-
         if ((inventory[giveId] ?? 0) <= 1) return
 
         get().removeSticker(giveId)
@@ -147,40 +163,36 @@ export const useStickerStore = create<StickerState>()(
             ...state.recentlyAdded.filter(r => r !== receiveId),
           ].slice(0, 5)
 
-          return {
-            inventory: updatedInventory,
-            recentlyAdded,
-          }
+          return { inventory: updatedInventory, recentlyAdded }
         })
       },
 
-      // ── Missing stickers ────────────────────────────────────────────────
+      // ── Missing stickers ─────────────────────────────────────────────────
       getMissing() {
-        const { inventory } = get()
-
-        return STICKERS.filter(
-          sticker => (inventory[sticker.id] ?? 0) < 1
+        const { inventory, albumVersion } = get()
+        return getFullStickers(albumVersion).filter(
+          s => (inventory[s.id] ?? 0) < 1
         )
       },
 
-      // ── Duplicate stickers ──────────────────────────────────────────────
+      // ── Duplicate stickers ───────────────────────────────────────────────
       getDuplicates() {
-        const { inventory } = get()
-
-        return STICKERS.filter(
-          sticker => (inventory[sticker.id] ?? 0) > 1
+        const { inventory, albumVersion } = get()
+        return getFullStickers(albumVersion).filter(
+          s => (inventory[s.id] ?? 0) > 1
         )
       },
 
-      // ── Album stats ─────────────────────────────────────────────────────
+      // ── Album stats ──────────────────────────────────────────────────────
       getStats() {
-        const { inventory } = get()
+        const { inventory, albumVersion } = get()
+        const allStickers = getFullStickers(albumVersion)
 
-        const owned = STICKERS.filter(
-          sticker => (inventory[sticker.id] ?? 0) >= 1
+        const owned = allStickers.filter(
+          s => (inventory[s.id] ?? 0) >= 1
         ).length
 
-        const total = STICKERS.length
+        const total = allStickers.length
 
         const duplicates = Object.values(inventory).reduce(
           (sum, count) => sum + Math.max(count - 1, 0),
@@ -192,10 +204,7 @@ export const useStickerStore = create<StickerState>()(
           missing: total - owned,
           duplicates,
           total,
-          completionPct:
-            total > 0
-              ? Math.round((owned / total) * 100)
-              : 0,
+          completionPct: total > 0 ? Math.round((owned / total) * 100) : 0,
         }
       },
     }),
@@ -205,28 +214,49 @@ export const useStickerStore = create<StickerState>()(
         getItem: (name) => {
           const str = safeStorage.getItem(name)
           if (!str) return null
+
           try {
-            return JSON.parse(str) as StorageValue<Pick<StickerState, 'inventory' | 'recentlyAdded'>>
+            return JSON.parse(str) as StorageValue<unknown>
           } catch {
             console.warn('[album-tracker] Estado corrupto en localStorage, se ignora.')
             return null
           }
         },
+
         setItem: (name, value) => {
           safeStorage.setItem(name, JSON.stringify(value))
         },
+
         removeItem: (name) => {
           safeStorage.removeItem(name)
         },
       },
-      version: 1,
-      migrate: (persistedState, _version) => {
-        // Cualquier versión anterior se conserva tal cual en lugar de borrarse.
-        return persistedState as Pick<StickerState, 'inventory' | 'recentlyAdded'>
+
+      version: 2,
+
+      migrate: (
+        persistedState: unknown,
+        version: number
+      ) => {
+        const state = persistedState as any
+
+        if (version < 2) {
+          state.albumVersion = null
+        }
+
+        return state
       },
-      partialize: state => ({
+
+      partialize: (
+        state
+      ): {
+        inventory: Inventory
+        recentlyAdded: string[]
+        albumVersion: AlbumVersion | null
+      } => ({
         inventory: state.inventory,
         recentlyAdded: state.recentlyAdded,
+        albumVersion: state.albumVersion,
       }),
     }
   )

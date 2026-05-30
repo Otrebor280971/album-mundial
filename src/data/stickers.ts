@@ -1,5 +1,8 @@
 import type { Sticker } from '../types'
-import stickersRaw from './stickers.txt?raw'
+import type { AlbumVersion } from '../store/stickerStore'
+import stickersRaw   from './stickers.txt?raw'
+import stickersCCMex from './stickersCC-mexico.txt?raw'
+import stickersCCUSA from './stickersCC-USA.txt?raw'
 
 function parseStickerLine(line: string): Sticker | null {
   const trimmed = line.trim()
@@ -18,16 +21,16 @@ function parseStickerLine(line: string): Sticker | null {
     return { id: '00', code: 'FWC', number: 0, country: 'Mundial', name: content, type: 'foil' }
   }
 
-  const codeMatch = stickerId.match(/[A-Z]+/)
+  const codeMatch   = stickerId.match(/[A-Z]+/)
   const numberMatch = stickerId.match(/\d+/)
 
   if (!codeMatch || !numberMatch) return null
 
-  const code = codeMatch[0]
+  const code   = codeMatch[0]
   const number = Number(numberMatch[0])
 
   let country = 'Mundial'
-  let name = content
+  let name    = content
 
   if (code === 'CC') {
     country = 'Coca-Cola'
@@ -36,7 +39,7 @@ function parseStickerLine(line: string): Sticker | null {
     }
   } else if (content.includes(' - ')) {
     const parts = content.split(' - ')
-    name = parts[0].trim()
+    name    = parts[0].trim()
     country = parts[1].trim()
   } else if (code !== 'FWC') {
     country = code
@@ -45,29 +48,37 @@ function parseStickerLine(line: string): Sticker | null {
   return { id: stickerId, code, number, country, name, type: isFoil ? 'foil' : 'normal' }
 }
 
+function parseRaw(raw: string): Sticker[] {
+  return raw
+    .split('\n')
+    .map(parseStickerLine)
+    .filter(Boolean) as Sticker[]
+}
+
+export const STICKERS:        Sticker[] = parseRaw(stickersRaw)
+export const STICKERS_CC_MEX: Sticker[] = parseRaw(stickersCCMex)
+export const STICKERS_CC_USA: Sticker[] = parseRaw(stickersCCUSA)
+
 export const COUNTRY_FLAGS: Record<string, string> = {}
 
-export const STICKERS: Sticker[] = stickersRaw
-  .split('\n')
-  .map(parseStickerLine)
-  .filter(Boolean) as Sticker[]
-
 export const COUNTRY_NAMES: Record<string, string> = {}
-
 for (const sticker of STICKERS) {
   if (!COUNTRY_NAMES[sticker.code]) {
     COUNTRY_NAMES[sticker.code] = sticker.country
   }
 }
 
-export function getStickersByCountry(): Record<string, Sticker[]> {
-  return STICKERS.reduce<Record<string, Sticker[]>>((acc, sticker) => {
-    if (!acc[sticker.code]) {
-      acc[sticker.code] = []
-    }
+function getVersionCC(version: AlbumVersion): Sticker[] {
+  if (version === 'MEX') return STICKERS_CC_MEX
+  if (version === 'USA') return STICKERS_CC_USA
+  return []
+}
 
+export function getStickersByCountry(version: AlbumVersion | null): Record<string, Sticker[]> {
+  const all = version ? [...STICKERS, ...getVersionCC(version)] : STICKERS
+  return all.reduce<Record<string, Sticker[]>>((acc, sticker) => {
+    if (!acc[sticker.code]) acc[sticker.code] = []
     acc[sticker.code].push(sticker)
-
     return acc
   }, {})
 }

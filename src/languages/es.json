@@ -1,0 +1,255 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "packs": "Sobres",
+    "album": "Álbum",
+    "missing": "Faltantes",
+    "trade": "Cambios",
+    "settings": "Configuración"
+  },
+  "home": {
+    "title": "Mi álbum",
+    "progress_label": "Progreso total",
+    "progress_stickers": "{{ownedRegular}} de {{totalRegular}} estampas",
+    "progress_cc": "{{ownedCC}} de {{totalCC}} estampas CC",
+    "stat_owned": "Tengo",
+    "stat_missing": "Faltan",
+    "stat_duplicates": "Repetidas",
+    "stat_teams": "Selecciones iniciadas",
+    "stat_teams_complete": "Selecciones completadas",
+    "stat_cc": "Estampas CC",
+    "stat_fwc": "Especiales (FWC)",
+    "action_packs_title": "Abrir sobres",
+    "action_packs_desc": "Registra estampas",
+    "action_album_title": "Ver álbum",
+    "action_album_desc": "Tu colección completa",
+    "action_missing_title": "Faltantes",
+    "action_missing_desc": "Las que te quedan",
+    "action_trade_title": "Intercambiar",
+    "action_trade_desc": "Gestiona cambios con otras personas"
+  },
+  "packs": {
+    "title": "Abrir sobres",
+    "subtitle": "Busca y agrega estampas",
+    "search_placeholder": "Buscar por código o nombre (ej. MEX17, messi...)",
+    "recently_added": "Últimas agregadas",
+    "recently_empty": "Aún no has agregado estampas",
+    "undo": "Deshacer",
+    "bulk_title": "Agregar múltiples",
+    "bulk_placeholder": "Ingresa los códigos de la estampa\nEJ: MEX1 BRA7 ARG10",
+    "bulk_button": "Agregar todas",
+    "badge_missing": "Falta"
+  },
+  "album": {
+    "title": "Álbum",
+    "subtitle": "Toca una estampa para marcarla"
+  },
+  "missing": {
+    "title": "Faltantes",
+    "subtitle": "{{count}} estampas por conseguir",
+    "search_placeholder": "Buscar faltante...",
+    "filter_all": "Todas ({{count}})",
+    "copy_button": "Copiar lista ({{count}})",
+    "empty_title": "¡No faltan estampas en esta selección!",
+    "have_it": "+ Tengo",
+    "toast": "Se copiaron ({{count}}) estampas al portapapeles"
+  },
+  "trade": {
+    "title": "Intercambiar",
+    "subtitle": "Gestiona tus cambios",
+    "col_missing": "Faltantes",
+    "col_missing_empty": "¡Ninguna!",
+    "col_duplicates": "Repetidas",
+    "col_duplicates_empty": "Sin repetidas aún",
+    "form_title": "Confirmar intercambio",
+    "give_label": "Entrego",
+    "give_placeholder": "Buscar (ej: MEX1)",
+    "receive_label": "Recibo",
+    "receive_placeholder": "Buscar (ej: ARG10)",
+    "confirm_button": "Confirmar intercambio",
+    "give_hint": "Disp: {{count}}",
+    "copy_button": "Copiar repetidas"
+  },
+  "toast": {
+    "sticker_added": "✓ {{name}} agregada",
+    "sticker_removed": "Eliminada: {{name}}",
+    "sticker_undone": "Deshecho: {{id}}",
+    "bulk_success": "✓ {{count}} estampas agregadas",
+    "bulk_partial": "{{valid}} agregadas, {{invalid}} no encontradas",
+    "trade_invalid": "Verifica los códigos ingresados",
+    "trade_success": "Intercambio realizado",
+    "copied": "¡Copiado!"
+  },
+  "sticker": {
+    "foil_label": "foil"
+  },
+  "countries": {
+    "FWC": "Mundial",
+    "CC": "Coca-Cola",
+    "JPN": "Japón",
+    "KOR": "Corea del Sur",
+    "CZE": "República Checa",
+    "IRN": "Irán",
+    "AUS": "Australia",
+    "KSA": "Arabia Saudita",
+    "QAT": "Qatar",
+    "UAE": "Emiratos Árabes",
+    "IRQ": "Irak",
+    "MAR": "Marruecos",
+    "SEN": "Senegal",
+    "TUN": "Túnez",
+    "ALG": "Argelia",
+    "EGY": "Egipto",
+    "NGA": "Nigeria",
+    "CIV": "Costa de Marfil",
+    "CMR": "Camerún",
+    "RSA": "Sudáfrica",
+    "MEX": "México",
+    "USA": "EE.UU.",
+    "CAN": "Canadá",
+    "CRC": "Costa Rica",
+    "PAN": "Panamá",
+    "JAM": "Jamaica",
+    "HON": "Honduras",
+    "ARG": "Argentina",
+    "BRA": "Brasil",
+    "URU": "Uruguay",
+    "COL": "Colombia",
+    "ECU": "Ecuador",
+    "CHI": "Chile",
+    "PAR": "Paraguay",
+    "PER": "Perú",
+    "FRA": "Francia",
+    "ESP": "España",
+    "POR": "Portugal",
+    "ENG": "Inglaterra",
+    "GER": "Alemania",
+    "ITA": "Italia",
+    "NED": "Países Bajos",
+    "BEL": "Bélgica",
+    "CRO": "Croacia",
+    "DEN": "Dinamarca",
+    "SUI": "Suiza",
+    "POL": "Polonia",
+    "SRB": "Serbia",
+    "SWE": "Suecia",
+    "NOR": "Noruega",
+    "UKR": "Ucrania",
+    "TUR": "Turquía",
+    "AUT": "Austria",
+    "BIH": "Bosnia y Herzegovina",
+    "HAI": "Haití",
+    "SCO": "Escocia",
+    "CUW": "Curazao",
+    "NZL": "Nueva Zelanda",
+    "CPV": "Cabo Verde",
+    "JOR": "Jordania",
+    "COD": "RD Congo",
+    "UZB": "Uzbekistán",
+    "GHA": "Ghana"
+  },
+  "settings": {
+    "version_MEX": "Latino america / Europa",
+    "version_USA": "Estados Unidos / Canada",
+    "version_stickers": "{{count}} estampas",
+    "title": "Configuración",
+    "subtitle": "Personaliza tu experiencia",
+    "tutorial_title": "Ver tutorial",
+    "tutorial_desc": "Repasa cómo funciona la aplicación",
+    "language_title": "Idioma",
+    "version_title": "Versión del álbum",
+    "version_none": "No seleccionada",
+    "cancel": "Cancelar"
+  },
+  "tutorial": {
+    "step_counter": "Paso {{current}} de {{total}}",
+    "next": "Siguiente",
+    "prev": "Anterior",
+    "finish": "¡Comenzar!",
+    "skip": "Saltar tutorial",
+    "steps": {
+      "welcome": {
+        "title": "Bienvenido",
+        "body": [
+          "Bienvenido a Album Tracker 2026.",
+          "Esta aplicación te ayuda a registrar estampas, seguir el progreso de tu álbum y administrar intercambios fácilmente.",
+          "Pulsa \"Siguiente\" para comenzar."
+        ]
+      },
+      "nav": {
+        "title": "Barra de navegación",
+        "body": [
+          "Utiliza la barra inferior para acceder a todas las secciones de la aplicación.",
+          "Desde aquí podrás navegar entre Dashboard, Sobres, Álbum, Faltantes, Intercambio y Configuración."
+        ]
+      },
+      "dashboard": {
+        "title": "Dashboard",
+        "body": [
+          "El Dashboard muestra un resumen general de tu colección.",
+          "Aquí podrás consultar rápidamente tu progreso total y acceder a las funciones más importantes."
+        ]
+      },
+      "stats": {
+        "title": "Estadísticas del álbum",
+        "body": [
+          "Estas tarjetas muestran:",
+          "• Estampas obtenidas.",
+          "• Estampas faltantes.",
+          "• Estampas repetidas.",
+          "• Selecciones iniciadas o completadas.",
+          "Toca la tarjeta de selecciones para alternar entre ambas estadísticas."
+        ]
+      },
+      "packs": {
+        "title": "Registrar estampas",
+        "body": [
+          "En esta sección puedes agregar nuevas estampas a tu colección.",
+          "Puedes registrarlas individualmente o varias al mismo tiempo después de abrir sobres."
+        ]
+      },
+      "bulk": {
+        "title": "Captura masiva",
+        "body": [
+          "Utiliza este campo para ingresar múltiples códigos de estampas de una sola vez y ahorrar tiempo."
+        ]
+      },
+      "album": {
+        "title": "Vista del álbum",
+        "body": [
+          "Aquí podrás visualizar el progreso completo de tu álbum y revisar qué estampas ya has conseguido."
+        ]
+      },
+      "missing": {
+        "title": "Estampas faltantes",
+        "body": [
+          "Consulta todas las estampas que aún necesitas.",
+          "También puedes filtrar por selección y copiar la lista para compartirla con otros coleccionistas."
+        ]
+      },
+      "trade": {
+        "title": "Intercambios",
+        "body": [
+          "Esta sección reúne tus estampas repetidas y faltantes para facilitar intercambios con otros coleccionistas."
+        ]
+      },
+      "trade_form": {
+        "title": "Registrar un intercambio",
+        "body": [
+          "Indica qué estampa entregas y cuál recibes.",
+          "La aplicación actualizará automáticamente tu inventario y progreso."
+        ]
+      },
+      "settings": {
+        "title": "Configuración",
+        "body": [
+          "Desde aquí puedes:",
+          "• Cambiar el idioma.",
+          "• Seleccionar la versión del álbum.",
+          "• Volver a iniciar este tutorial cuando lo necesites.",
+          "¡Ya estás listo para comenzar tu colección!"
+        ]
+      }
+    }
+  }
+}

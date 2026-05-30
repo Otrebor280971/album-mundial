@@ -2,6 +2,7 @@ interface StatCardProps {
   label: string
   value: number | string
   color?: 'green' | 'red' | 'amber' | 'blue' | 'default' | 'purple' | 'pink' | 'aqua'
+  onTap?: () => void
 }
 
 const colorMap = {
@@ -15,9 +16,14 @@ const colorMap = {
   default: 'text-neutral-100',
 }
 
-export function StatCard({ label, value, color = 'default' }: StatCardProps) {
+export function StatCard({ label, value, color = 'default', onTap }: StatCardProps) {
   return (
-    <div className="bg-[#111111] rounded-xl border border-neutral-800 p-3.5">
+    <div
+      onClick={onTap}
+      className={`bg-[#111111] rounded-xl border border-neutral-800 p-3.5 transition-all duration-150
+        ${onTap ? 'cursor-pointer active:scale-95 active:border-neutral-600' : ''}
+      `}
+    >
       <p className="text-[11px] text-neutral-400 uppercase tracking-wide mb-1.5">{label}</p>
       <p className={`text-[26px] font-semibold leading-none tracking-tight ${colorMap[color]}`}>
         {value}

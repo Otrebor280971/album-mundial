@@ -2,33 +2,35 @@ import { useStickerStore } from '../store/stickerStore'
 import { StickerCard } from '../components/StickerCard'
 import { useToast } from '../hooks/useToast'
 import { getStickersByCountry } from '../data/stickers'
-import { COUNTRY_META } from '../data/CountryMeta' // <-- Asegura que esta ruta sea correcta
+import { getCountryMeta } from '../data/CountryMeta'
+import { useTranslation } from 'react-i18next'
 
 export function AlbumView() {
-  const inventory = useStickerStore(s => s.inventory)
-  const addSticker = useStickerStore(s => s.addSticker)
+  const { t } = useTranslation()
+  const inventory     = useStickerStore(s => s.inventory)
+  const addSticker    = useStickerStore(s => s.addSticker)
   const removeSticker = useStickerStore(s => s.removeSticker)
+  const albumVersion  = useStickerStore(s => s.albumVersion)
   const { toast } = useToast()
 
-  const byCountry = getStickersByCountry()
+  const countryMeta = getCountryMeta(t)
+  const byCountry   = getStickersByCountry(albumVersion)
 
   function handleTap(id: string, name: string, isOwned: boolean) {
     if (isOwned) { removeSticker(id); toast(`Eliminada: ${name}`) }
-    else         { addSticker(id);    toast(`✓ ${name} agregada`)  }
+    else         { addSticker(id);    toast(`✓ ${name} agregada`) }
   }
 
   return (
     <div className="px-4 pt-4 pb-24 text-neutral-100">
-      <h1 className="text-2xl font-semibold tracking-tight mb-0.5">Álbum</h1>
-      <p className="text-sm text-neutral-400 mb-5">Toca una estampa para marcarla</p>
+      <h1 className="text-2xl font-semibold tracking-tight mb-0.5">{t('album.title')}</h1>
+      <p className="text-sm text-neutral-400 mb-5">{t('album.subtitle')}</p>
 
       {Object.entries(byCountry).map(([code, stickers]) => {
         const owned = stickers.filter(s => (inventory[s.id] ?? 0) >= 1).length
-        
-        // Buscamos los metadatos visuales del país o usamos fallback
-        const meta = COUNTRY_META[code]
-        const Icon = meta?.icon
-        const name = meta?.label || code
+        const meta  = countryMeta[code]
+        const Icon  = meta?.icon
+        const name  = meta?.label || code
 
         return (
           <section key={code} className="mb-6">
@@ -39,8 +41,7 @@ export function AlbumView() {
               </h2>
               <span className="text-xs text-neutral-400">{owned}/{stickers.length}</span>
             </div>
-            
-            {/* Barra de progreso modo oscuro */}
+
             <div className="h-1 bg-neutral-800 rounded-full overflow-hidden mb-3">
               <div
                 className="h-full bg-brand-400 rounded-full transition-all duration-300"

@@ -1,0 +1,12 @@
+CC1 Lamine Yamal
+CC2 Joshua Kimmich
+CC3 Harry Kane
+CC4 Santiago Giménez
+CC5 Antonee Robinson
+CC6 Jefferson Lerma
+CC7 Edson Álvarez
+CC8 Virgil van Dijk
+CC9 Alphonso Davies
+CC10 Weston McKennie
+CC11 Lautaro Martínez
+CC12 Gabriel Magalhães

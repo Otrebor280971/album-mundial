@@ -1,12 +1,6 @@
-import {
-  House,
-  Package,
-  BookOpen,
-  ListChecks,
-  Repeat,
-} from 'lucide-react'
-
+import { House, Package, BookOpen, ListChecks, Repeat, Settings} from 'lucide-react'
 import type { View } from '../types'
+import { useTranslation } from 'react-i18next'
 
 interface NavItem {
   view: View
@@ -14,33 +8,7 @@ interface NavItem {
   icon: React.ReactNode
 }
 
-const NAV_ITEMS: NavItem[] = [
-  {
-    view: 'home',
-    label: 'Inicio',
-    icon: <House size={22} strokeWidth={2.2} />,
-  },
-  {
-    view: 'packs',
-    label: 'Sobres',
-    icon: <Package size={22} strokeWidth={2.2} />,
-  },
-  {
-    view: 'album',
-    label: 'Álbum',
-    icon: <BookOpen size={22} strokeWidth={2.2} />,
-  },
-  {
-    view: 'missing',
-    label: 'Faltantes',
-    icon: <ListChecks size={22} strokeWidth={2.2} />,
-  },
-  {
-    view: 'trade',
-    label: 'Cambios',
-    icon: <Repeat size={22} strokeWidth={2.2} />,
-  },
-]
+
 
 interface BottomNavProps {
   current: View
@@ -51,6 +19,41 @@ export function BottomNav({
   current,
   onChange,
 }: BottomNavProps) {
+  
+  const { t } = useTranslation()
+  const NAV_ITEMS: NavItem[] = [
+  {
+    view: 'home',
+    label: t('nav.home'),
+    icon: <House size={22} strokeWidth={2.2} />,
+  },
+  {
+    view: 'packs',
+    label: t('nav.packs'),
+    icon: <Package size={22} strokeWidth={2.2} />,
+  },
+  {
+    view: 'album',
+    label: t('nav.album'),
+    icon: <BookOpen size={22} strokeWidth={2.2} />,
+  },
+  {
+    view: 'missing',
+    label: t('nav.missing'),
+    icon: <ListChecks size={22} strokeWidth={2.2} />,
+  },
+  {
+    view: 'trade',
+    label: t('nav.trade'),
+    icon: <Repeat size={22} strokeWidth={2.2} />,
+  },
+  {
+    view: 'settings',
+    label: t('nav.settings'),
+    icon: <Settings size={22} strokeWidth={2.2} />,
+  },
+]
+
   return (
     <nav
       className="
