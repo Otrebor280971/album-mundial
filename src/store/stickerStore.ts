@@ -241,7 +241,7 @@ export const useStickerStore = create<StickerState>()(
         const state = persistedState as any
 
         if (version < 2) {
-          state.albumVersion = null
+          state.albumVersion = 'MEX'
         }
 
         return state
